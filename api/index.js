@@ -30,7 +30,9 @@ const db = mysql.createConnection({
     database: process.env.DATABASE
 });
 
+//Routes
 app.use('/users', require('./routes/user') );
+app.use('/orders', require('./routes/order') );
 
 app.listen(port, hostname, () => {
     console.log(`Server started at http://${hostname}:${port}`);
