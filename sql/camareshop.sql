@@ -20,7 +20,6 @@ USE `camare_shop` ;
 CREATE TABLE IF NOT EXISTS `camare_shop`.`cities` (
   `city_id` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(100) NOT NULL,
-  `province_id` INT NOT NULL,
   `zipcode` INT NOT NULL,
   PRIMARY KEY (`city_id`))
 ENGINE = InnoDB;

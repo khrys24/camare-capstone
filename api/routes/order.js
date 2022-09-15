@@ -1,8 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const mysql = require('mysql2');
-// const bcrypt = require('bcrypt');
-const userController = require('../controllers/userController');
 
 const db = mysql.createConnection({
     host: process.env.DATABASE_HOST,
@@ -12,7 +10,20 @@ const db = mysql.createConnection({
     database: process.env.DATABASE
 });
 
-router.get('/cities', (req, res) => {
+router.get('/list', (req, res) => { // { status: 'completed' }
+    db.query(
+        `SELECT * FROM orders where status = ${req.body.status}`,
+        (err, rows) => {
+            if(err) {
+                return console.log(err.message);
+            }
+
+            res.send(rows);
+        }
+    );
+});
+
+router.get('/add', (req, res) => {
     db.query(
         `SELECT * FROM cities`,
         (err, rows) => {
@@ -24,9 +35,8 @@ router.get('/cities', (req, res) => {
         }
     );
 });
-   
 
-router.post('/register', userController.register);
+   
 
 
 module.exports = router;
