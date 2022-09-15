@@ -1,0 +1,23 @@
+.menu--selections{
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 50px;
+}
+
+@media screen and (max-width:800px) {
+    .menu--selections {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    
+}
+
+.featured {
+    border: none;
+    box-shadow: none;
+}
+
+.featured--photo {
+    border-radius: 100%;
+}
