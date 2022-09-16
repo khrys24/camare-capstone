@@ -22,6 +22,7 @@ app.use(function(req, res, next) {
     next();
 });
 
+// console.log('process.env', process.env);
 const db = mysql.createConnection({
     host: process.env.DATABASE_HOST,
     port: process.env.DATABASE_PORT,
