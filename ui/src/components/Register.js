@@ -17,18 +17,18 @@ import swal from 'sweetalert';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { red } from '@mui/material/colors';
 
-function Copyright(props) {
-    return (
-        <Typography variant="body2" color="text.secondary" align="center" {...props}>
-            {'Copyright © '}
-            <Link color="inherit" href="https://mui.com/">
-                Your Website
-            </Link>{' '}
-            {new Date().getFullYear()}
-            {'.'}
-        </Typography>
-    );
-}
+// function Copyright(props) {
+//     return (
+//         <Typography variant="body2" color="text.secondary" align="center" {...props}>
+//             {'Copyright © '}
+//             <Link color="inherit" href="https://mui.com/">
+//                 Your Website
+//             </Link>{' '}
+//             {new Date().getFullYear()}
+//             {'.'}
+//         </Typography>
+//     );
+// }
 
 const theme = createTheme();
 
@@ -54,8 +54,21 @@ export default function Register() {
         }
     );
         
-        // const validateEmail = () => {
-        //     const emailValue = email.value.trim();
+        // const regEx =
+        //     /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        
+        // const [email, setEmail] = useState('');
+        // const [error, setError] = useState('');
+        
+        // const checkEmail = (e) => {
+        //     setEmail(e.target.value);
+        // }
+
+        // if(regEx.test(email) === false) {
+        //     setError('Please enter valid email');
+        // } else {
+        //     setError('');
+        //     return true;
         // }
 
         const getCities = async () => {
@@ -64,15 +77,11 @@ export default function Register() {
             setCities(data);
         }
         
-        const onCityChange = (e) => {
-            console.log('City: ', e.target.value);
-            setCity(e.target.value);
-        };
-
+        
         const handleSubmit = (event) => {
             event.preventDefault();
             const data = new FormData(event.currentTarget);
-
+            
             let params = {
                 first_name: data.get('first_name'),
                 last_name: data.get('last_name'),
@@ -86,9 +95,9 @@ export default function Register() {
                 is_admin: 0,
                 status: 'active'
             };
-        
+            
                 console.log(params);
-
+                
                 // Registers a user
                 axios.post("http://localhost:3001/users/register", params)
                     .then( (res) => {
@@ -107,20 +116,35 @@ export default function Register() {
                                 confirm_password: "",
                                 error_list: {}
                             }
-                        );
-                    } ).catch( (err) => {
-                        console.log('error:', err);
-                        setUser( {...user, error_list: err.response.data} );
-                    });
-    };
+                            );
+                        } ).catch( (err) => {
+                            console.log('error:', err);
+                            setUser( {...user, error_list: err.response.data} );
+                        });
+                    };
+                    
+                    const onCityChange = (e) => {
+                        console.log('City: ', e.target.value);
+                        setCity(e.target.value);
+                    };
 
-    return (
-        <ThemeProvider theme={theme}>
+                    const onInputChange = (e, field) => {
+                        setUser({ ...user, [field]: e.target.value})
+                    };
+
+                    // const onChanges = () => {
+                    //     onCityChange(e);
+                    //     onInputChange(e, field);
+                    // }
+                    
+                    return (
+                        <ThemeProvider theme={theme}>
             <Container component="main" maxWidth="xs">
                 <CssBaseline />
                 <Box
                     sx={{
-                        marginTop: 8,
+                        marginTop: 15,
+                        marginBottom: 10,
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'center',
@@ -143,6 +167,8 @@ export default function Register() {
                                     fullWidth
                                     id="first_name"
                                     label="First Name"
+                                    value={user.first_name}
+                                    onChange={(e) => onInputChange(e, 'first_name')}
                                     autoFocus
                                 />
                                 <div className='invalid-feedback'>
@@ -158,6 +184,8 @@ export default function Register() {
                                     label="Last Name"
                                     name="last_name"
                                     autoComplete="family-name"
+                                    value={user.last_name}
+                                    onChange={(e) => onInputChange(e, 'last_name')}
                                 />
                                 <div className='invalid-feedback' style={ {color: red} }>
                                     {user.error_list.last_name}
@@ -172,6 +200,8 @@ export default function Register() {
                                     label="Phone Number"
                                     name="phone_number"
                                     type="number"
+                                    value={user.phone_number}
+                                    onChange={(e) => onInputChange(e, 'phone_number')}
                                 />
                                 <div className='invalid-feedback'>
                                     {user.error_list.phone_number}
@@ -185,6 +215,8 @@ export default function Register() {
                                     id="address"
                                     label="Street Name, Building, House No."
                                     name="address"
+                                    value={user.address}
+                                    onChange={(e) => onInputChange(e, 'address')}
                                 />
                                 <div className='invalid-feedback'>
                                     {user.error_list.address}
@@ -196,10 +228,11 @@ export default function Register() {
                                     id="outlined-select-currency"
                                     select
                                     label="City"
-                                    value={city}
+                                    value={user.city}
                                     name="city"
                                     fullWidth
-                                    onChange={onCityChange}
+                                    onChange={(e) => onInputChange(e, 'city')}
+                                    // onChange={onCityChange}
                                 >
                                     {cities.map((city) => (
                                         <MenuItem key={city.city_id} value={city.city_id}>
@@ -233,9 +266,14 @@ export default function Register() {
                                     name="email"
                                     type="email"
                                     autoComplete="email"
+                                    value={user.email}
+                                    onChange={(e) => onInputChange(e, 'email')}
+                                    // onChange={checkEmail}
+
                                 />
                                 <div className='invalid-feedback'>
                                     {user.error_list.email}
+                                    {/* {error} */}
                                 </div>
                             </Grid>
                             <Grid item xs={12}>
@@ -248,7 +286,9 @@ export default function Register() {
                                     type="password"
                                     id="password"
                                     autoComplete="new-password"
-                                />
+                                    value={user.password}
+                                    onChange={(e) => onInputChange(e, 'password')}
+                                    />
                                 <div className='invalid-feedback'>
                                     {user.error_list.password}
                                 </div>
@@ -263,6 +303,8 @@ export default function Register() {
                                     type="password"
                                     id="confirm_password"
                                     autoComplete="new-password"
+                                    value={user.confirm_password}
+                                    onChange={(e) => onInputChange(e, 'confirm_password')}
                                 />
                                 <div className='invalid-feedback'>
                                     {user.error_list.confirm_password}
@@ -286,7 +328,7 @@ export default function Register() {
                         </Grid>
                     </Box>
                 </Box>
-                <Copyright sx={{ mt: 5 }} />
+                {/* <Copyright sx={{ mt: 5 }} /> */}
             </Container>
         </ThemeProvider>
     );
